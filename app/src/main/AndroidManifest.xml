@@ -17,6 +17,17 @@
             android:label="@string/app_name"
             android:theme="@style/Theme.ComposeTutorial">
             <intent-filter>
+                <action android:name="android.intent.action.MAIN1" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".codelab1.CodeLab1Activity"
+            android:exported="true"
+            android:theme="@style/Theme.ComposeTutorial">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
