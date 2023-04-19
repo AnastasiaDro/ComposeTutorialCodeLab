@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,27 +28,39 @@ class CodeLab1Activity : ComponentActivity() {
     
     @Composable
     private fun Greeting(name: String) {
+        //However you can't just assign mutableStateOf to a
+        // variable inside a composable. As explained before,
+        // recomposition can happen at any time which would
+        // call the composable again, resetting the state
+        // to a new mutable state with a value of false.
+        //
+        //To preserve state across recompositions,
+        // remember the mutable state using remember.
+
+        val isExpanded = remember { mutableStateOf(false) }
+        //remember is used to guard against recomposition, so the state is not reset.
+        val extraPadding = if (isExpanded.value) 48.dp else 0.dp
+
         Surface(color = MaterialTheme.colors.primary,
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)) {
             Row(modifier = Modifier
                 .padding(24.dp)
                 .fillMaxWidth()) {
-                Column(modifier = Modifier.weight(1f)) {
+                Column(modifier = Modifier
+                    .weight(1f)
+                    .padding(bottom = extraPadding)) {
                     Text(text = "Hello, ")
                     Text(text = name)
                 }
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { isExpanded.value = !isExpanded.value },
                     shape = CircleShape,
                     elevation = ButtonDefaults.elevation(defaultElevation = 20.dp),
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Color.White,
-                    contentColor = MaterialTheme.colors.primary),
-
-                    modifier = Modifier
-                        .weight(1f)
+                    contentColor = MaterialTheme.colors.primary)
                 ) {
-                        Text(text = "Show more")
+                        Text(text =  if (isExpanded.value) "Show less" else "Show more")
                 }
             }
 
